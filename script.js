@@ -142,3 +142,35 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('scroll', animateOnScroll);
     animateOnScroll();
 });
+
+// Active menu
+
+document.addEventListener("DOMContentLoaded", () => {
+  const sections = document.querySelectorAll("section[id]");
+  const navLinks = document.querySelectorAll(".nav-links a");
+
+  const observerOptions = {
+    root: null,
+    rootMargin: "-20% 0px -70% 0px", // Detecta la sección cuando entra en la parte superior de la pantalla
+    threshold: 0
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute("id");
+
+        // Quita la clase 'active' de todos los enlaces y se la añade al actual
+        navLinks.forEach((link) => {
+          link.classList.remove("active");
+          if (link.getAttribute("href") === `#${id}`) {
+            link.classList.add("active");
+          }
+        });
+      }
+    });
+  }, observerOptions);
+
+  // Observa cada sección de la página
+  sections.forEach((section) => observer.observe(section));
+});
